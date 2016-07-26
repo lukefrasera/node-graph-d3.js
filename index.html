@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Collapsible Tree Example</title>
+
+    <style>
+
+  div.tooltip {
+    position: absolute;
+    text-align: left;
+    width: 180px;
+    height: 50px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+  }
+
+ .node circle {
+   fill: #fff;
+   stroke: steelblue;
+   stroke-width: 3px;
+ }
+
+ .node {
+  cursor: pointer;
+ }
+
+ .node text { font: 12px sans-serif; }
+
+ .link {
+   fill: none;
+   stroke: #ccc;
+   stroke-width: 2px;
+ }
+ 
+    </style>
+
+  </head>
+
+  <body>
+
+<!-- load the d3.js library --> 
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+<script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+ 
+<script>
+var ros = new ROSLIB.Ros({
+    url : 'ws://localhost:9090'
+  });
+var nodeID = "";
+
+  ros.on('connection', function() {
+    console.log('Connected to websocket server.');
+  });
+
+  ros.on('error', function(error) {
+    console.log('Error connecting to websocket server: ', error);
+  });
+
+  ros.on('close', function() {
+    console.log('Connection to websocket server closed.');
+  });
+
+ var listener = new ROSLIB.Topic({
+    ros : ros,
+    name : '/listener',
+    messageType : 'std_msgs/String'
+  });
+
+  listener.subscribe(function(message) {
+    console.log('Received message on ' + listener.name + ': ' + message.data);
+    window.nodeID =message.data;
+    root = treeData[0];
+
+    update(root, nodeID);
+
+  });
+    
+
+
+  
+
+
+var treeData = [
+  {
+    "name": "THEN",
+    "parent": "null",
+    "value": 15,
+    "type": "blue",
+    "level": "black",
+    "id1": "node1",
+    "linecolor": "grey",
+    "children": [
+      {
+        "name": "AND",
+        "parent": "THEN",
+        "value": 15,
+        "type": "grey",
+        "level": "black",
+        "id1": "node2",
+        "linecolor": "grey",
+        "robot": 01,
+        "nodenumber": 001,
+        "children": [
+          {
+            "name": "THEN",
+            "parent": "AND",
+            "value": 15,
+            "type": "grey",
+            "level": "black",
+            "id1": "node3",
+            "linecolor": "grey",
+            "children": [
+              {
+                "name": "Place Bowl",
+                "parent": "THEN",
+                "value": 10,
+                "type": "grey",
+                "level": "black",
+                "id1": "node4",
+                "linecolor": "yellow"
+              },
+              {
+                "name":"Place Plate",
+                "parent":"THEN",
+                "value": 10,
+                "type": "grey",
+                "level": "black",
+                "id1": "node5",
+                "linecolor": "black"
+              }
+            ]
+          },
+          {
+            "name": "Place Knife",
+            "parent": "AND",
+            "value": 10,
+            "type": "grey",
+            "level": "black",
+            "id1": "node6",
+            "linecolor": "grey"
+          },
+          {
+            "name": "Place Fork",
+            "parent": "AND",
+            "value": 10,
+            "type": "grey",
+            "level": "black",
+            "id1": "node7",
+            "linecolor": "grey"
+          },
+          {
+            "name": "Place Spoon",
+            "parent": "AND",
+            "value": 10,
+            "type": "grey",
+            "level": "black",
+            "id1": "node8",
+            "linecolor": "grey"
+          },
+          {
+            "name": "OR",
+            "parent": "AND",
+            "value": 15,
+            "type": "grey",
+            "level": "black",
+            "id1": "node9",
+            "linecolor": "grey",
+            "children": [
+                {
+                  "name": "Place Soda Can",
+                  "parent": "OR",
+                  "value": 10,
+                  "type": "grey",
+                  "level": "black",
+                  "id1": "node10",
+                  "linecolor": "grey"
+                },
+                {
+                  "name": "Place Cup",
+                  "parent": "OR",
+                  "value": 10,
+                  "type": "grey",
+                  "level": "black",
+                  "id1": "node11",
+                  "linecolor": "grey"
+                },
+                {
+                  "name": "Place Wine Glass",
+                  "parent": "OR",
+                  "value": 10,
+                  "type": "grey",
+                  "level": "black",
+                  "id1": "node12",
+                  "linecolor": "grey"
+                }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Place Placemat",
+        "parent": "THEN",
+        "value": 10,
+        "type": "grey",
+        "level": "black",
+        "id1": "node13"
+      }
+    ]
+  }
+];
+
+// ************** Generate the tree diagram  *****************
+var margin = {top: 50, right: 120, bottom: 20, left: 120},
+ width = 850 - margin.right - margin.left,
+ height = 850 - margin.top - margin.bottom;
+ 
+var i = 0;
+
+
+
+var tree = d3.layout.tree()
+ .size([height, width]);
+
+var diagonal = d3.svg.diagonal()
+ .projection(function(d) { return [d.x, d.y]; });
+
+var svg = d3.select("body").append("svg")
+ .attr("width", width + margin.right + margin.left)
+ .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+ .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+function update(source, nodeID1) {
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(root).reverse(),
+   links = tree.links(nodes);
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) { d.y = d.depth * 100; });
+
+  // Declare the nodesâ€¦
+  var node = svg.selectAll("g.node")
+   .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+  // Enter the nodes.
+  var nodeEnter = node.enter().append("g")
+   .attr("class", "node")
+   .attr("transform", function(d) { 
+    return "translate(" + d.x + "," + d.y + ")"; })
+      // add tool tip for ps -eo pid,ppid,pcpu,size,comm,ruser,s
+    .on("mouseover", function(d) {
+        div.transition()
+          .duration(200)
+          .style("opacity", .9);
+        div .html(
+            "Node type: " + d.name + "<br/>" +
+            "Robot: " + d.robot + "<br/>" +
+            "Node number: " + d.nodenumber
+            )
+          .style("left", (d3.event.pageX) + "px")
+          .style("top", (d3.event.pageY - 28) + "px");
+        })
+      .on("mouseout", function(d) {
+        div.transition()
+          .duration(500)
+          .style("opacity", 0);
+        });
+
+
+   nodes.forEach(function(d){
+  		if(d.id1 == nodeID1) {
+  			d.level = "red";
+  		}
+  		console.log(nodeID1);
+  	});
+
+  nodeEnter.append("circle")
+   .attr("r", function(d) { return d.value; })
+   .style("stroke", function(d) { return d.type; })
+   .style("fill", function(d) { return d.level; });
+
+  // nodeEnter.append("rect")
+  //  .attr("height", 15)
+  //  .attr("width", 30)
+  //  .style("stroke", function(d) { return d.type; })
+  //  .attr("rx", 5)
+  //  .attr("ry", 5);
+
+
+  nodeEnter.append("text")
+   .attr("y", function(d) { 
+    return d.children || d._children ? 
+    (d.value + 4) * -1 : d.value + 4 })
+   .attr("dy", ".35em")
+   .attr("text-anchor", "middle")
+   .text(function(d) { return d.name; })
+   .style("fill-opacity", 1);
+
+  var div = d3.select("body").append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0);
+
+  // Declare the linksâ€¦
+  var link = svg.selectAll("path.link")
+   .data(links, function(d) { return d.target.id; });
+
+  // Enter the links.
+  link.enter().insert("path", "g")
+   .attr("class", "link")
+   .style("stroke", function(d) { return d.target.linecolor; })
+   .attr("d", diagonal);
+
+}
+
+
+
+ function updateData() {
+
+    // Get the data again
+    d3.csv("data-alt.csv", function(error, data) {
+        data.forEach(function(d) {
+        d.date = parseDate(d.date);
+        d.close = +d.close;
+      });
+
+      // Scale the range of the data again 
+      x.domain(d3.extent(data, function(d) { return d.date; }));
+            y.domain([0, d3.max(data, function(d) { return d.close; })]);
+
+    // Select the section we want to apply our changes to
+    var svg = d3.select("body").transition();
+
+    // Make the changes
+        svg.select(".line")   // change the line
+            .duration(750)
+            .attr("d", valueline(data));
+        svg.select(".x.axis") // change the x axis
+            .duration(750)
+            .call(xAxis);
+        svg.select(".y.axis") // change the y axis
+            .duration(750)
+            .call(yAxis);
+
+    });
+}
+
+// setTimeout(function(){
+//    window.location.reload(1);
+// }, 1000);
+</script>
+
+<div id="option">
+    <input name="updateButton" 
+           type="button" 
+           value="Update" 
+           onclick="update()" 
+    />
+</div>
+ 
+  </body>
+</html>
+
+
+	
+Tommy Yang

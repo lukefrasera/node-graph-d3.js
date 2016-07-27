@@ -95,62 +95,61 @@ var treeData = [
     "linecolor": "grey",
     "children": [
       {
+        "name": "Place Placemat",
+        "parent": "THEN",
+        "value": 20,
+        "type": "grey",
+        "level": "black",
+        "id1": "node2"
+      },
+      {
         "name": "AND",
         "parent": "THEN",
         "value": 20,
         "type": "grey",
         "level": "black",
-        "id1": "node2",
+        "id1": "node3",
         "linecolor": "grey",
         "robot": 01,
         "nodenumber": 001,
         "children": [
           {
-            "name": "THEN",
+            "name": "OR",
             "parent": "AND",
             "value": 20,
             "type": "grey",
             "level": "black",
-            "id1": "node3",
+            "id1": "node4",
             "linecolor": "grey",
-            "children": [
-              {
-                "name": "Place Bowl",
-                "parent": "THEN",
-                "value": 20,
-                "type": "grey",
-                "level": "black",
-                "id1": "node4",
-                "linecolor": "yellow"
-              },
-              {
-                "name":"Place Plate",
-                "parent":"THEN",
-                "value": 20,
-                "type": "grey",
-                "level": "black",
-                "id1": "node5",
-                "linecolor": "black"
-              }
+            "children": [    
+                {
+                  "name": "Place Wine Glass",
+                  "parent": "OR",
+                  "value": 20,
+                  "type": "grey",
+                  "level": "black",
+                  "id1": "node5",
+                  "linecolor": "grey"
+                },
+                {
+                  "name": "Place Cup",
+                  "parent": "OR",
+                  "value": 20,
+                  "type": "grey",
+                  "level": "black",
+                  "id1": "node6",
+                  "linecolor": "grey"
+                },
+                {
+                  "name": "Place Soda Can",
+                  "parent": "OR",
+                  "value": 20,
+                  "type": "grey",
+                  "level": "black",
+                  "id1": "node7",
+                  "linecolor": "grey"
+                }
             ]
-          },
-          {
-            "name": "Place Knife",
-            "parent": "AND",
-            "value": 20,
-            "type": "grey",
-            "level": "black",
-            "id1": "node6",
-            "linecolor": "grey"
-          },
-          {
-            "name": "Place Fork",
-            "parent": "AND",
-            "value": 20,
-            "type": "grey",
-            "level": "black",
-            "id1": "node7",
-            "linecolor": "grey"
           },
           {
             "name": "Place Spoon",
@@ -162,52 +161,53 @@ var treeData = [
             "linecolor": "grey"
           },
           {
-            "name": "OR",
+            "name": "Place Fork",
             "parent": "AND",
             "value": 20,
             "type": "grey",
             "level": "black",
             "id1": "node9",
+            "linecolor": "grey"
+          },
+          {
+            "name": "Place Knife",
+            "parent": "AND",
+            "value": 20,
+            "type": "grey",
+            "level": "black",
+            "id1": "node10",
+            "linecolor": "grey"
+          },
+          {
+            "name": "THEN",
+            "parent": "AND",
+            "value": 20,
+            "type": "grey",
+            "level": "black",
+            "id1": "node11",
             "linecolor": "grey",
             "children": [
-                {
-                  "name": "Place Soda Can",
-                  "parent": "OR",
-                  "value": 20,
-                  "type": "grey",
-                  "level": "black",
-                  "id1": "node10",
-                  "linecolor": "grey"
-                },
-                {
-                  "name": "Place Cup",
-                  "parent": "OR",
-                  "value": 20,
-                  "type": "grey",
-                  "level": "black",
-                  "id1": "node11",
-                  "linecolor": "grey"
-                },
-                {
-                  "name": "Place Wine Glass",
-                  "parent": "OR",
-                  "value": 20,
-                  "type": "grey",
-                  "level": "black",
-                  "id1": "node12",
-                  "linecolor": "grey"
-                }
+              {
+                "name":"Place Plate",
+                "parent":"THEN",
+                "value": 20,
+                "type": "grey",
+                "level": "black",
+                "id1": "node12",
+                "linecolor": "black"
+              },
+              {
+                "name": "Place Bowl",
+                "parent": "THEN",
+                "value": 20,
+                "type": "grey",
+                "level": "black",
+                "id1": "node13",
+                "linecolor": "yellow"
+              }
             ]
           }
         ]
-      },
-      {
-        "name": "Place Placemat",
-        "parent": "THEN",
-        "value": 20,
-        "type": "grey",
-        "level": "black",
-        "id1": "node13"
       }
     ]
   }

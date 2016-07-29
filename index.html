@@ -12,13 +12,18 @@
     position: absolute;
     text-align: left;
     width: 180px;
-    height: 50px;
+    height: 100px;
     padding: 2px;
     font: 12px sans-serif;
     background: lightsteelblue;
     border: 0px;
     border-radius: 8px;
     pointer-events: none;
+  }
+
+  #imgs{
+    height: 50px;
+    width: 50px;
   }
 
  .node circle {
@@ -103,6 +108,7 @@ var treeData = [
     "id1": "node1",
     "linecolor": "grey",
     "type": "THEN",
+    // "image": "<img src=bowl.JPG id='imgs'/>",
     "children": [
       {
         "name": "Place Placemat",
@@ -111,7 +117,8 @@ var treeData = [
         "highlight_color": "grey",
         "color": "black",
         "id1": "node2",
-        "type": "BEHAVIOR"
+        "type": "BEHAVIOR",
+        "image": "<img src=placemat.JPG id='imgs'/>"
       },
       {
         "name": "AND",
@@ -124,6 +131,7 @@ var treeData = [
         "robot": 01,
         "nodenumber": 001,
         "type": "AND",
+        // "image": "<img src=bowl.JPG id='imgs'/>",
         "children": [
           {
             "name": "OR",
@@ -134,6 +142,7 @@ var treeData = [
             "id1": "node4",
             "linecolor": "grey",
             "type": "OR",
+            // "image": "<img src=bowl.JPG id='imgs'/>",
             "children": [    
                 {
                   "name": "Place Wine Glass",
@@ -143,7 +152,8 @@ var treeData = [
                   "color": "black",
                   "id1": "node5",
                   "linecolor": "grey",
-                  "type": "BEHAVIOR"
+                  "type": "BEHAVIOR",
+                  "image": "<img src=cup1.JPG id='imgs'/>"
                 },
                 {
                   "name": "Place Cup",
@@ -153,7 +163,8 @@ var treeData = [
                   "color": "black",
                   "id1": "node6",
                   "linecolor": "grey",
-                  "type": "BEHAVIOR"
+                  "type": "BEHAVIOR",
+                  "image": "<img src=cup.JPG id='imgs'/>"
                 },
                 {
                   "name": "Place Soda Can",
@@ -163,7 +174,8 @@ var treeData = [
                   "color": "black",
                   "id1": "node7",
                   "linecolor": "grey",
-                  "type": "BEHAVIOR"
+                  "type": "BEHAVIOR",
+                  "image": "<img src=soda.JPG id='imgs'/>"
                 }
             ]
           },
@@ -175,7 +187,8 @@ var treeData = [
             "color": "black",
             "id1": "node8",
             "linecolor": "grey",
-            "type": "BEHAVIOR"
+            "type": "BEHAVIOR",
+            "image": "<img src=spoon.JPG id='imgs'/>"
           },
           {
             "name": "Place Fork",
@@ -185,7 +198,8 @@ var treeData = [
             "color": "black",
             "id1": "node9",
             "linecolor": "grey",
-            "type": "BEHAVIOR"
+            "type": "BEHAVIOR",
+            "image": "<img src=fork.JPG id='imgs'/>"
           },
           {
             "name": "Place Knife",
@@ -195,7 +209,8 @@ var treeData = [
             "color": "black",
             "id1": "node10",
             "linecolor": "grey",
-            "type": "BEHAVIOR"
+            "type": "BEHAVIOR",
+            "image": "<img src=knife.JPG id='imgs'/>"
           },
           {
             "name": "THEN",
@@ -206,6 +221,7 @@ var treeData = [
             "id1": "node11",
             "linecolor": "grey",
             "type": "THEN",
+            // "image": "<img src=bowl.JPG id='imgs'/>",
             "children": [
               {
                 "name":"Place Plate",
@@ -215,7 +231,8 @@ var treeData = [
                 "color": "black",
                 "id1": "node12",
                 "linecolor": "black",
-                "type": "BEHAVIOR"
+                "type": "BEHAVIOR",
+                "image": "<img src=plate.JPG id='imgs'/>"
               },
               {
                 "name": "Place Bowl",
@@ -225,7 +242,8 @@ var treeData = [
                 "color": "black",
                 "id1": "node13",
                 "linecolor": "yellow",
-                "type": "BEHAVIOR"
+                "type": "BEHAVIOR",
+                "image": "<img src=bowl.JPG id='imgs'/>"
               }
             ]
           }
@@ -281,7 +299,8 @@ function update(source, nodeID1) {
         div .html(
             "Node type: " + d.name + "<br/>" +
             "Robot: " + d.robot + "<br/>" +
-            "Node number: " + d.nodenumber
+            "Node number: " + d.nodenumber + "<br/>" +
+            d.image
             )
           .style("left", (d3.event.pageX) + "px")
           .style("top", (d3.event.pageY - 28) + "px");

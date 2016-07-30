@@ -60,7 +60,10 @@
 var ros = new ROSLIB.Ros({
     url : 'ws://localhost:9090'
   });
-var nodeID = "";
+var nodecolor;
+
+var nodeID;
+
 
   ros.on('connection', function() {
     console.log('Connected to websocket server.');
@@ -76,21 +79,27 @@ var nodeID = "";
 
  var listener = new ROSLIB.Topic({
     ros : ros,
-    name : '/listener',
-    messageType : 'std_msgs/String'
+    name : '/state',
+    messageType : 'robotics_task_tree_eval/State'
   });
 
   listener.subscribe(function(message) {
-    console.log('Received message on ' + listener.name + ': ' + message.data);
+    // console.log('Received message on ' + listener.name + ': ' + message.data);
     // window.nodeID = message.data;
-    window.nodeID = message.data;
+    // window.nodecolor = message.active;
+    window.nodecolor = message.active;
+    window.nodeID = message.owner.node;
+    console.log(message);
+    console.log(message.owner.node);
+
+
     
 
     // declares the root for rendering the graph 
     root = treeData[0];
 
     // this renders the graph
-    update(root, nodeID);
+    update(root, nodecolor, nodeID);
     // update(root, nodeID, nodeLinecolor);
 
   });
@@ -207,7 +216,7 @@ var treeData = [
             "value": 20,
             "highlight_color": "grey",
             "color": "black",
-            "id1": "node10",
+            "id1": "10",
             "linecolor": "grey",
             "type": "BEHAVIOR",
             "image": "<img src=knife.JPG id='imgs'/>"
@@ -241,7 +250,7 @@ var treeData = [
                 "highlight_color": "grey",
                 "color": "black",
                 "id1": "node13",
-                "linecolor": "yellow",
+                "linecolor": "red",
                 "type": "BEHAVIOR",
                 "image": "<img src=bowl.JPG id='imgs'/>"
               }
@@ -273,7 +282,7 @@ var svg = d3.select("body").append("svg")
  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-function update(source, nodeID1) {
+function update(source, nodecolor, nodeID) {
 
   // Compute the new tree layout.
   var nodes = tree.nodes(root).reverse(),
@@ -313,10 +322,12 @@ function update(source, nodeID1) {
 
 
    nodes.forEach(function(d){
-  		if(d.id1 == nodeID1) {
-  			d.highlight_color = "red";
+      console.log('Node color: ' + nodecolor);
+      console.log(d.id1);
+  		if(nodecolor == 1 && d.id1 == nodeID) {
+  			d.color = "red";
   		}
-  		console.log(nodeID1);
+  		// console.log(nodeID1);
   	});
 
   nodeEnter.append("path")

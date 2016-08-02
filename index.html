@@ -97,9 +97,6 @@ function refresh(){
     console.log(message);
     console.log(message.owner.node);
 
-
-    
-
     // declares the root for rendering the graph 
     root = treeData[0];
 
@@ -315,6 +312,10 @@ function update(source, nodecolor, nodeID, nodesize,robot) {
   var node = svg.selectAll("g.node")
    .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
+  //  // Declare the links¦
+  // var link = svg.selectAll("g.link")
+  //  .data(links, function(d) { return d.id || (d.id = ++i); });
+
   // Enter the nodes.
   var nodeEnter = node.enter().append("g")
    .attr("class", "node")
@@ -400,15 +401,46 @@ function update(source, nodecolor, nodeID, nodesize,robot) {
   // Enter the links.
   link.enter().insert("path", "g")
    .attr("class", "link")
-   .style("stroke", function(d) { return d.target.linecolor; })
+   .style("stroke", function(d) { if (d.target.color == "grey")
+                                   {
+                                    return "grey"; 
+                                   }
+                                
+                                  if (d.target.color == "blue")
+                                   {
+                                    return "blue"; 
+                                   }
+
+                                if (d.target.color == "red")
+                                   {
+                                    return "red"; 
+                                   }
+                                
+                                if (d.target.color == "yellow")
+                                   {
+                                    return "yellow"; 
+                                   }
+                                })
    .attr("d", diagonal)
-   .style("stroke-width", function(d) { if (d.target.color == "red")
+   .style("stroke-width", function(d) { if (d.target.color == "grey")
                                        {
-                                        return 10; 
+                                        return 3; 
+                                       }
+                                       if (d.target.color == "blue")
+                                       {
+                                        return 5; 
+                                       }
+                                       if (d.target.color == "yellow")
+                                       {
+                                        return 7; 
+                                       }
+                                       if (d.target.color == "red")
+                                       {
+                                        return 9; 
                                        }
                                       })
 
-   // d3.selectAll("g").remove();
+   // d3.selectAll("g.link").remove();
  }
 
 //  function updateData() {
@@ -444,7 +476,7 @@ function update(source, nodecolor, nodeID, nodesize,robot) {
 //     });
 // }
 
-setInterval(function(){ d3.selectAll("g.node").remove(); refresh(); }, 3000);
+setInterval(function(){ d3.selectAll("g.link").remove(); refresh(); }, 3000);
 
 
 </script>

@@ -11,7 +11,7 @@
   div.tooltip {
     position: absolute;
     text-align: left;
-    width: 180px;
+    width: 180px; 
     height: 100px;
     padding: 2px;
     font: 12px sans-serif;
@@ -61,6 +61,8 @@ var ros = new ROSLIB.Ros({
     url : 'ws://localhost:9090'
   });
 var nodecolor;
+var nodesize;
+var robot;
 
 var nodeID;
 
@@ -77,6 +79,7 @@ var nodeID;
     console.log('Connection to websocket server closed.');
   });
 
+function refresh(){
  var listener = new ROSLIB.Topic({
     ros : ros,
     name : '/state',
@@ -87,7 +90,9 @@ var nodeID;
     // console.log('Received message on ' + listener.name + ': ' + message.data);
     // window.nodeID = message.data;
     // window.nodecolor = message.active;
-    window.nodecolor = message.active;
+    window.nodecolor = message.activation_level;
+    window.nodesize = message.activation_potential;
+    window.robot = message.owner.robot;
     window.nodeID = message.owner.node;
     console.log(message);
     console.log(message.owner.node);
@@ -99,14 +104,15 @@ var nodeID;
     root = treeData[0];
 
     // this renders the graph
-    update(root, nodecolor, nodeID);
-    // update(root, nodeID, nodeLinecolor);
-
+    update(root, nodecolor, nodeID, nodesize, robot);
   });
+}
+
 
 var treeData = [
   {
     "name": "THEN",
+    "size" : 400,
     "parent": "null",
     // value is how far away the node
     "value": 20,
@@ -114,28 +120,30 @@ var treeData = [
     "highlight_color": "red",
     // type is the center color
     "color": "red",
-    "id1": "node1",
+    "id1": "1",
     "linecolor": "grey",
     "type": "THEN",
     // "image": "<img src=bowl.JPG id='imgs'/>",
     "children": [
       {
         "name": "Place Placemat",
+        "size" : 400,
         "parent": "THEN",
         "value": 20,
         "highlight_color": "grey",
         "color": "black",
-        "id1": "node2",
+        "id1": "2",
         "type": "BEHAVIOR",
         "image": "<img src=placemat.JPG id='imgs'/>"
       },
       {
         "name": "AND",
+        "size" : 400,
         "parent": "THEN",
         "value": 20,
         "highlight_color": "grey",
         "color": "red",
-        "id1": "node3",
+        "id1": "3",
         "linecolor": "grey",
         "robot": 01,
         "nodenumber": 001,
@@ -144,44 +152,48 @@ var treeData = [
         "children": [
           {
             "name": "OR",
+            "size" : 400,
             "parent": "AND",
             "value": 20,
             "highlight_color": "grey",
             "color": "black",
-            "id1": "node4",
+            "id1": "4",
             "linecolor": "grey",
             "type": "OR",
             // "image": "<img src=bowl.JPG id='imgs'/>",
             "children": [    
                 {
                   "name": "Place Wine Glass",
+                  "size" : 400,
                   "parent": "OR",
                   "value": 20,
                   "highlight_color": "grey",
                   "color": "black",
-                  "id1": "node5",
+                  "id1": "5",
                   "linecolor": "grey",
                   "type": "BEHAVIOR",
                   "image": "<img src=cup1.JPG id='imgs'/>"
                 },
                 {
                   "name": "Place Cup",
+                  "size" : 400,
                   "parent": "OR",
                   "value": 20,
                   "highlight_color": "grey",
                   "color": "black",
-                  "id1": "node6",
+                  "id1": "6",
                   "linecolor": "grey",
                   "type": "BEHAVIOR",
                   "image": "<img src=cup.JPG id='imgs'/>"
                 },
                 {
                   "name": "Place Soda Can",
+                  "size" : 400,
                   "parent": "OR",
                   "value": 20,
                   "highlight_color": "grey",
                   "color": "black",
-                  "id1": "node7",
+                  "id1": "7",
                   "linecolor": "grey",
                   "type": "BEHAVIOR",
                   "image": "<img src=soda.JPG id='imgs'/>"
@@ -190,28 +202,31 @@ var treeData = [
           },
           {
             "name": "Place Spoon",
+            "size" : 400,
             "parent": "AND",
             "value": 20,
             "highlight_color": "grey",
             "color": "black",
-            "id1": "node8",
+            "id1": "8",
             "linecolor": "grey",
             "type": "BEHAVIOR",
             "image": "<img src=spoon.JPG id='imgs'/>"
           },
           {
             "name": "Place Fork",
+            "size" : 400,
             "parent": "AND",
             "value": 20,
             "highlight_color": "grey",
             "color": "black",
-            "id1": "node9",
+            "id1": "9",
             "linecolor": "grey",
             "type": "BEHAVIOR",
             "image": "<img src=fork.JPG id='imgs'/>"
           },
           {
             "name": "Place Knife",
+            "size" : 400,
             "parent": "AND",
             "value": 20,
             "highlight_color": "grey",
@@ -223,33 +238,36 @@ var treeData = [
           },
           {
             "name": "THEN",
+            "size" : 400,
             "parent": "AND",
             "value": 20,
             "highlight_color": "grey",
             "color": "black",
-            "id1": "node11",
+            "id1": "11",
             "linecolor": "grey",
             "type": "THEN",
             // "image": "<img src=bowl.JPG id='imgs'/>",
             "children": [
               {
                 "name":"Place Plate",
+                "size" : 400,
                 "parent":"THEN",
                 "value": 20,
                 "highlight_color": "grey",
                 "color": "black",
-                "id1": "node12",
+                "id1": "12",
                 "linecolor": "black",
                 "type": "BEHAVIOR",
                 "image": "<img src=plate.JPG id='imgs'/>"
               },
               {
                 "name": "Place Bowl",
+                "size" : 400,
                 "parent": "THEN",
                 "value": 20,
                 "highlight_color": "grey",
                 "color": "black",
-                "id1": "node13",
+                "id1": "13",
                 "linecolor": "red",
                 "type": "BEHAVIOR",
                 "image": "<img src=bowl.JPG id='imgs'/>"
@@ -282,7 +300,9 @@ var svg = d3.select("body").append("svg")
  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-function update(source, nodecolor, nodeID) {
+
+
+function update(source, nodecolor, nodeID, nodesize,robot) {
 
   // Compute the new tree layout.
   var nodes = tree.nodes(root).reverse(),
@@ -324,16 +344,30 @@ function update(source, nodecolor, nodeID) {
    nodes.forEach(function(d){
       console.log('Node color: ' + nodecolor);
       console.log(d.id1);
-  		if(nodecolor == 1 && d.id1 == nodeID) {
-  			d.color = "red";
+  		if(0 < nodecolor && nodecolor < 0.24 && d.id1 == nodeID) {
+  			d.color = "grey";
   		}
+      if(0.25 < nodecolor && nodecolor < 0.49 && d.id1 == nodeID) {
+        d.color = "blue";
+      }
+      if(0.50 < nodecolor && nodecolor < 0.74 && d.id1 == nodeID) {
+        d.color = "yellow";
+      }
+      if(0.75 < nodecolor && nodecolor < 1.01 && d.id1 == nodeID) {
+        d.color = "red";
+      }
+      if(d.id1 == nodeID) {
+        d.size = (nodesize+1)*400;
+        d.value = (nodesize+1)*20;
+        d.robot = robot;
+      }
   		// console.log(nodeID1);
   	});
 
   nodeEnter.append("path")
    .attr("d", d3.svg.symbol()
                 // size of the shape
-                 .size(400)
+                 .size(function(d){ return d.size;})
                  .type(function(d) { if
                     (d.type == "THEN") { return "triangle-down"; }
                     else if
@@ -345,22 +379,6 @@ function update(source, nodecolor, nodeID) {
                   }))
    .style("stroke", function(d) { return d.highlight_color; })
    .style("fill", function(d) { return d.color; });
-
-    // nodeEnter.append("image")
-    //   .attr("xlink:href", function(d) { return d.icon; })
-    //   .attr("x", "-18px")
-    //   .attr("y", "-19px")
-    //   .attr("width", "36")
-    //   .attr("height", "36");
-
-
-  // nodeEnter.append("rect")
-  //  .attr("height", 15)
-  //  .attr("width", 30)
-  //  .style("stroke", function(d) { return d.type; })
-  //  .attr("rx", 5)
-  //  .attr("ry", 5);
-
 
   nodeEnter.append("text")
    .attr("y", function(d) { 
@@ -389,41 +407,46 @@ function update(source, nodecolor, nodeID) {
                                         return 10; 
                                        }
                                       })
+
+   // d3.selectAll("g").remove();
  }
 
- function updateData() {
+//  function updateData() {
 
-    // Get the data again
-    d3.csv("data-alt.csv", function(error, data) {
-        data.forEach(function(d) {
-        d.date = parseDate(d.date);
-        d.close = +d.close;
-      });
+//     // Get the data again
+//     d3.csv("data-alt.csv", function(error, data) {
+//         data.forEach(function(d) {
+//         d.date = parseDate(d.date);
+//         d.close = +d.close;
+//       });
 
-      // Scale the range of the data again 
-      x.domain(d3.extent(data, function(d) { return d.date; }));
-            y.domain([0, d3.max(data, function(d) { return d.close; })]);
+//       // Scale the range of the data again 
+//       x.domain(d3.extent(data, function(d) { return d.date; }));
+//             y.domain([0, d3.max(data, function(d) { return d.close; })]);
 
-    // Select the section we want to apply our changes to
-    var svg = d3.select("body").transition();
+//     // Select the section we want to apply our changes to
+//     var svg = d3.select("body").transition()
+//               // .selectAll("svg")
+//               .data(treeData);  
 
-    // Make the changes
-        svg.select(".line")   // change the line
-            .duration(750)
-            .attr("d", valueline(data));
-        svg.select(".x.axis") // change the x axis
-            .duration(750)
-            .call(xAxis);
-        svg.select(".y.axis") // change the y axis
-            .duration(750)
-            .call(yAxis);
+//     // Make the changes
+//         svg.select(".line")   // change the line
+//             .duration(750)
+//             .attr("d", valueline(data));
+//         svg.select(".x.axis") // change the x axis
+//             .duration(750)
+//             .call(xAxis);
+//         svg.select(".y.axis") // change the y axis
+//             .duration(750)
+//             .call(yAxis);
 
-    });
-}
+//        svg.enter().append("svg")  
+//     });
+// }
 
-// setTimeout(function(){
-//    window.location.reload(1);
-// }, 1000);
+setInterval(function(){ d3.selectAll("g.node").remove(); refresh(); }, 3000);
+
+
 </script>
 
 <div id="option">

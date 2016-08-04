@@ -79,11 +79,35 @@ var nodeID;
     console.log('Connection to websocket server closed.');
   });
 
-function refresh(){
+// function refresh(){
  var listener = new ROSLIB.Topic({
     ros : ros,
     name : '/state',
     messageType : 'robotics_task_tree_eval/State'
+  });
+
+ var param = new ROSLIB.Param({
+    ros : ros,
+    name : 'NodeList'
+  });
+ var nodes = {};
+ param.get(function(value) {
+    nodes = [];
+    for (var i = 0;i < value.length; i++) {
+
+      console.log(value[i]);
+      var node_param = new ROSLIB.Param({
+        ros : ros,
+        name : "Nodes/" + value[i]
+      });
+      node_param.get(function(msg) {
+        nodes[this.name] = msg;
+        console.log(nodes);
+        console.log(value[i]);
+      })
+    }
+
+    console.log(nodes);
   });
 
   listener.subscribe(function(message) {
@@ -94,8 +118,8 @@ function refresh(){
     window.nodesize = message.activation_potential;
     window.robot = message.owner.robot;
     window.nodeID = message.owner.node;
-    console.log(message);
-    console.log(message.owner.node);
+    // console.log(message);
+    // console.log(message.owner.node);
 
     // declares the root for rendering the graph 
     root = treeData[0];
@@ -103,8 +127,7 @@ function refresh(){
     // this renders the graph
     update(root, nodecolor, nodeID, nodesize, robot);
   });
-}
-
+// }
 
 var treeData = [
   {
@@ -343,8 +366,8 @@ function update(source, nodecolor, nodeID, nodesize,robot) {
 
 
    nodes.forEach(function(d){
-      console.log('Node color: ' + nodecolor);
-      console.log(d.id1);
+      // console.log('Node color: ' + nodecolor);
+      // console.log(d.id1);
   		if(0 < nodecolor && nodecolor < 0.24 && d.id1 == nodeID) {
   			d.color = "grey";
   		}
@@ -476,7 +499,9 @@ function update(source, nodecolor, nodeID, nodesize,robot) {
 //     });
 // }
 
-setInterval(function(){ d3.selectAll("g.link").remove(); refresh(); }, 3000);
+// setInterval(function(){ d3.selectAll("g.link").remove(); refresh(); }, 3000);
+
+setInterval(function(){ d3.selectAll("g.link").remove(); update(); }, 3000);
 
 
 </script>
